@@ -132,9 +132,9 @@ export default defineConfig(async () => {
   console.log(`Всего сгенерировано ${sidebar.length} категорий в сайдбаре`);
   return {
     lang: "ru-RU",
-    title: "StarSu_13",
+    title: "StarSu_14",
     description: "Справочник по Starfinder (alpha)",
-    base: "/StarSu_13/",
+    base: "/StarSu_14/",
     lastUpdated: true,
     //Поиск
     themeConfig: {
