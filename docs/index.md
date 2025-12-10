@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "StarSu_13"
+  name: "StarSu_14"
   text: ""
   tagline: Справочник по Starfinder (alpha)
   actions:
