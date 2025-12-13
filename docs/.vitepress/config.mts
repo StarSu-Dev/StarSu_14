@@ -29,6 +29,7 @@ const categoryConfig = [
   { name: "Бестиарий", collapsed: true, enabled: true },
   { name: "Ведение игры", collapsed: true, enabled: true },
   { name: "Наследие Pathfinder", collapsed: true, enabled: true },
+  { name: "Лицензии", collapsed: false, enabled: true },
   // Добавляйте новые категории здесь
 ];
 
@@ -168,6 +169,15 @@ export default defineConfig(async () => {
             })),
         },
       ],
+      socialLinks: [
+        // Можно добавить любую иконку из simple-icons (https://simpleicons.org/):
+        { icon: "telegram", link: "t.me/ThroughThe_Star_Su" },
+
+        // Можно добавить пользовательские иконки, передав SVG в виде строки:
+      ],
+      footer: {
+        message: "Создано с ❤️ для сообщества Starfinder",
+      },
     },
 
     // Настройка маршрутизации
