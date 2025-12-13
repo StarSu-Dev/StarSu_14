@@ -136,9 +136,13 @@ export default defineConfig(async () => {
     title: "StarSu",
     description: "Справочник по Starfinder (alpha)",
     base: "/StarSu_14/",
+    sitemap: {
+      hostname: "https://starsu-dev.github.io/StarSu_14/",
+    },
     lastUpdated: true,
-    //Поиск
+
     themeConfig: {
+      // Поиск
       search: {
         provider: "local",
       },
