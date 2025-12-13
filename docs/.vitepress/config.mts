@@ -171,7 +171,7 @@ export default defineConfig(async () => {
       ],
       socialLinks: [
         // Можно добавить любую иконку из simple-icons (https://simpleicons.org/):
-        { icon: "telegram", link: "t.me/ThroughThe_Star_Su" },
+        { icon: "telegram", link: "https://t.me/ThroughThe_Star_Su" },
 
         // Можно добавить пользовательские иконки, передав SVG в виде строки:
       ],
