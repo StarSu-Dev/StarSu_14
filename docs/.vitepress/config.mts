@@ -135,9 +135,9 @@ export default defineConfig(async () => {
     lang: "ru-RU",
     title: "StarSu",
     description: "Справочник по Starfinder (alpha)",
-    base: "/StarSu_14/",
+    base: "/",
     sitemap: {
-      hostname: "https://starsu-dev.github.io/StarSu_14/",
+      hostname: "http://starsu.online/",
     },
     lastUpdated: true,
 
@@ -185,7 +185,7 @@ export default defineConfig(async () => {
     },
 
     // Настройка маршрутизации
-    cleanUrls: true,
+    cleanUrls: false,
 
     // Опционально: создание индексных страниц для категорий
     async transformPageData(pageData, { siteConfig }) {
