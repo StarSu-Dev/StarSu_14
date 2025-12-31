@@ -1,3 +1,13 @@
+---
+head:
+  - - meta
+    - name: description
+      content: StarSu | Справочник по Starfinder
+  - - meta
+    - name: keywords
+      content: Starfinder, справочник по Starfinder, справочник старфайндер, справочник старфайндер на русском языке
+---
+
 # Добро пожаловать на StarSu!
 
 Этот сайт — попытка сделать удобный справочник по настольно ролевой игре **Starfinder** на русском языке.
