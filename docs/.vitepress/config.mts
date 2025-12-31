@@ -139,8 +139,15 @@ export default defineConfig(async () => {
     sitemap: {
       hostname: "https://starsu.ru/",
     },
+    //Последние обновление
     lastUpdated: true,
 
+    //LazyLoading изображений
+    markdown: {
+      image: {
+        LazyLoading: true,
+      },
+    },
     themeConfig: {
       // Поиск
       search: {
