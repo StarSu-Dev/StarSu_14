@@ -137,7 +137,7 @@ export default defineConfig(async () => {
     description: "Справочник по Starfinder (alpha)",
     base: "/",
     sitemap: {
-      hostname: "http://starsu.online/",
+      hostname: "https://starsu.ru/",
     },
     lastUpdated: true,
 
