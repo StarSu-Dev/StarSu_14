@@ -5,7 +5,7 @@ head:
       content: StarSu | Справочник по Starfinder
   - - meta
     - name: keywords
-      content: Starfinder, справочник по Starfinder, справочник старфайндер, справочник старфайндер на русском языке
+      content: Starfinder, справочник по Starfinder, справочник старфайндер, справочник старфайндер на русском языке, Starfinder Ru
 ---
 
 # Добро пожаловать на StarSu!
