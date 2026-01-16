@@ -5,7 +5,11 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const docsRoot = join(__dirname, "..");
-const contentRoot = join(docsRoot, "content"); // Папка с контентом
+const contentRoot = join(docsRoot, "content");
+
+/* -----------------------------------
+  Типы
+----------------------------------- */
 
 interface SidebarItem {
   text: string;
@@ -14,7 +18,10 @@ interface SidebarItem {
   items?: SidebarItem[];
 }
 
-// Конфигурация категорий (можно настроить порядок и свойства)
+/* -----------------------------------
+  Категории StarSu
+----------------------------------- */
+
 const categoryConfig = [
   { name: "Создание персонажей", collapsed: true, enabled: true },
   { name: "Темы", collapsed: true, enabled: true },
@@ -30,153 +37,179 @@ const categoryConfig = [
   { name: "Ведение игры", collapsed: true, enabled: true },
   { name: "Наследие Pathfinder", collapsed: true, enabled: true },
   { name: "Лицензии", collapsed: false, enabled: true },
-  // Добавляйте новые категории здесь
 ];
 
-// Функция сканирования одной категории
+/* -----------------------------------
+  Сканирование папок
+----------------------------------- */
+
 function scanCategory(categoryName: string): SidebarItem[] {
   const categoryPath = join(contentRoot, categoryName);
-  const items: SidebarItem[] = [];
 
   if (!existsSync(categoryPath)) {
-    console.warn(`Папка "${categoryName}" не найдена по пути: ${categoryPath}`);
-    return items;
+    console.warn(`⚠ Категория не найдена: ${categoryName}`);
+    return [];
   }
 
-  console.log(`Сканирую категорию: ${categoryName}`);
+  const scanDirectory = (
+    currentPath: string,
+    basePath: string = categoryPath
+  ): SidebarItem[] => {
+    const result: SidebarItem[] = [];
+    const files = readdirSync(currentPath);
 
-  try {
-    const scanDirectory = (
-      currentPath: string,
-      basePath: string = categoryPath
-    ): SidebarItem[] => {
-      const dirItems: SidebarItem[] = [];
-      const files = readdirSync(currentPath);
+    for (const file of files) {
+      if (file.startsWith(".") || file === "node_modules") continue;
 
-      for (const file of files) {
-        const filePath = join(currentPath, file);
-        const stats = statSync(filePath);
+      const filePath = join(currentPath, file);
+      const stats = statSync(filePath);
 
-        // Игнорируем скрытые файлы
-        if (file.startsWith(".") || file === "node_modules") continue;
+      if (stats.isDirectory()) {
+        const children = scanDirectory(filePath, basePath);
 
-        if (stats.isDirectory()) {
-          const children = scanDirectory(filePath, basePath);
-          if (children.length > 0) {
-            dirItems.push({
-              text: file,
-              collapsed: true, // Вложенные папки свернуты
-              items: children,
-            });
-          }
-        } else if (file.endsWith(".md") && !file.startsWith("_")) {
-          // Формируем правильный путь для ссылки
-          const relativePath = relative(basePath, filePath);
-          const link = `/content/${categoryName}/${relativePath.replace(
-            /\.md$/,
-            ""
-          )}`;
-
-          // Можно извлечь заголовок из frontmatter, если нужно
-          dirItems.push({
-            text: file.replace(/\.md$/, ""),
-            link: link,
+        if (children.length) {
+          result.push({
+            text: file,
+            collapsed: true,
+            items: children,
           });
         }
       }
 
-      // Сортировка: папки -> файлы, по алфавиту
-      return dirItems.sort((a, b) => {
-        const aIsDir = "items" in a && a.items !== undefined;
-        const bIsDir = "items" in b && b.items !== undefined;
+      if (stats.isFile() && file.endsWith(".md") && !file.startsWith("_")) {
+        const relativePath = relative(basePath, filePath)
+          .replace(/\\/g, "/")
+          .replace(/\.md$/, "");
 
-        if (aIsDir && !bIsDir) return -1;
-        if (!aIsDir && bIsDir) return 1;
-        return a.text.localeCompare(b.text);
-      });
-    };
-
-    const categoryItems = scanDirectory(categoryPath);
-    console.log(`  Найдено ${categoryItems.length} элементов`);
-
-    return categoryItems;
-  } catch (err) {
-    console.error(`Ошибка при сканировании "${categoryName}":`, err);
-    return [];
-  }
-}
-
-// Генерация всего сайдбара
-function generateSidebar() {
-  const sidebar: SidebarItem[] = [];
-
-  for (const category of categoryConfig) {
-    if (!category.enabled) continue;
-
-    const categoryItems = scanCategory(category.name);
-
-    if (categoryItems.length > 0) {
-      sidebar.push({
-        text: category.name,
-        collapsed: category.collapsed,
-        items: categoryItems,
-      });
+        result.push({
+          text: file.replace(/\.md$/, ""),
+          link: `/content/${categoryName}/${relativePath}`,
+        });
+      }
     }
-  }
 
-  return sidebar;
+    // Сортировка: сначала папки, потом файлы
+    return result.sort((a, b) => {
+      const aFolder = !!a.items;
+      const bFolder = !!b.items;
+
+      if (aFolder && !bFolder) return -1;
+      if (!aFolder && bFolder) return 1;
+
+      return a.text.localeCompare(b.text, "ru");
+    });
+  };
+
+  return scanDirectory(categoryPath);
 }
 
-// Конфигурация VitePress
+/* -----------------------------------
+  Генерация sidebar
+----------------------------------- */
+
+function generateSidebar(): SidebarItem[] {
+  return categoryConfig
+    .filter((cat) => cat.enabled)
+    .map((cat) => {
+      const items = scanCategory(cat.name);
+
+      if (!items.length) return null;
+
+      return {
+        text: cat.name,
+        collapsed: cat.collapsed,
+        items,
+      };
+    })
+    .filter(Boolean) as SidebarItem[];
+}
+
+/* -----------------------------------
+  VitePress Config
+----------------------------------- */
+
 export default defineConfig(async () => {
   const sidebar = generateSidebar();
-  console.log(`Всего сгенерировано ${sidebar.length} категорий в сайдбаре`);
+
+  console.log(`✅ Загружено категорий: ${sidebar.length}`);
+
   return {
     lang: "ru-RU",
     title: "StarSu",
     description: "Справочник по Starfinder (alpha)",
     base: "/",
+
     sitemap: {
-      hostname: "https://starsu.ru/",
+      hostname: "https://starsu.ru",
     },
-    locales: {
-      ru: {
-        lable: "Русский",
-        lang: "ru",
-        link: "/ru/guide",
-      },
-    },
-    //Последние обновление
+
     lastUpdated: true,
 
-    //LazyLoading изображений
     markdown: {
       image: {
-        LazyLoading: true,
+        lazyLoading: true,
       },
     },
+
+    cleanUrls: false,
+
     themeConfig: {
-      // Поиск
+      /* ---------- Локализация UI ---------- */
+
+      outlineTitle: "На этой странице",
+
+      lastUpdatedText: "Последнее обновление",
+
+      returnToTopLabel: "Наверх",
+
+      darkModeSwitchLabel: "Тема",
+      lightModeSwitchTitle: "Светлая тема",
+      darkModeSwitchTitle: "Тёмная тема",
+
+      docFooter: {
+        prev: "Предыдущая страница",
+        next: "Следующая страница",
+      },
+
+      /* ---------- Поиск ---------- */
+
       search: {
         provider: "local",
+        options: {
+          translations: {
+            button: {
+              buttonText: "Поиск",
+              buttonAriaLabel: "Поиск",
+            },
+            modal: {
+              noResultsText: "Ничего не найдено",
+              resetButtonTitle: "Очистить",
+              footer: {
+                selectText: "выбрать",
+                navigateText: "перейти",
+                closeText: "закрыть",
+              },
+            },
+          },
+        },
       },
+
+      /* ---------- Sidebar ---------- */
+
       sidebar:
         sidebar.length > 0
           ? sidebar
           : [
               {
                 text: "Содержание",
-                items: [
-                  { text: "Главная", link: "/" },
-                  { text: "Категории не найдены", link: "/" },
-                ],
+                items: [{ text: "Главная", link: "/" }],
               },
             ],
 
-      // Дополнительные настройки навигации
+      /* ---------- Навигация ---------- */
+
       nav: [
         { text: "Главная", link: "/" },
-        //{ text: "Содержание", link: "/content/" },
         {
           text: "Справочники",
           items: categoryConfig
@@ -187,29 +220,16 @@ export default defineConfig(async () => {
             })),
         },
       ],
-      socialLinks: [
-        // Можно добавить любую иконку из simple-icons (https://simpleicons.org/):
-        { icon: "telegram", link: "https://t.me/ThroughThe_Star_Su" },
 
-        // Можно добавить пользовательские иконки, передав SVG в виде строки:
+      /* ---------- Соцсети ---------- */
+
+      socialLinks: [
+        { icon: "telegram", link: "https://t.me/ThroughThe_Star_Su" },
       ],
+
       footer: {
         message: "Создано с ❤️ для сообщества Starfinder",
       },
-    },
-
-    // Настройка маршрутизации
-    cleanUrls: false,
-
-    // Опционально: создание индексных страниц для категорий
-    async transformPageData(pageData, { siteConfig }) {
-      // Автоматически создаем index.md для категорий, если их нет
-      if (
-        pageData.relativePath.startsWith("content/") &&
-        pageData.relativePath.endsWith(".md")
-      ) {
-        // Логика для обработки страниц категорий
-      }
     },
   };
 });
