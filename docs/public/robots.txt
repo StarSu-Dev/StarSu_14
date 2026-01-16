@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /assets/
+Disallow: /.vitepress/
+
+Sitemap: https://starsu.ru/sitemap.xml
