@@ -139,6 +139,13 @@ export default defineConfig(async () => {
     sitemap: {
       hostname: "https://starsu.ru/",
     },
+    locales: {
+      ru: {
+        lable: "Русский",
+        lang: "ru",
+        link: "/ru/guide",
+      },
+    },
     //Последние обновление
     lastUpdated: true,
 
