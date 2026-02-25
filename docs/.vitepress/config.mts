@@ -202,18 +202,17 @@ export default defineConfig(async () => {
       ["link", { rel: "manifest", href: "/site.webmanifest" }],
     ],
 
+    /* ---------- Тема и локализация ---------- */
     themeConfig: {
-      /* ---------- Локализация UI ---------- */
+    
 
-      outlineTitle: "На этой странице",
+    outlineTitle: "На этой странице",
+    lastUpdatedText: "Последнее обновление",
+    returnToTopLabel: "Наверх",
 
-      lastUpdatedText: "Последнее обновление",
-
-      returnToTopLabel: "Наверх",
-
-      darkModeSwitchLabel: "Тема",
-      lightModeSwitchTitle: "Светлая тема",
-      darkModeSwitchTitle: "Тёмная тема",
+    darkModeSwitchLabel: "Тема",
+    lightModeSwitchTitle: "Светлая тема",
+    darkModeSwitchTitle: "Тёмная тема",
 
       docFooter: {
         prev: "Предыдущая страница",
