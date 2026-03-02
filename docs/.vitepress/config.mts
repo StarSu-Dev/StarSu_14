@@ -36,6 +36,7 @@ const categoryConfig = [
   { name: "Бестиарий", collapsed: true, enabled: true },
   { name: "Ведение игры", collapsed: true, enabled: true },
   { name: "Наследие Pathfinder", collapsed: true, enabled: true },
+  { name: "Ширма мастера", collapsed: true, enabled: true },
   { name: "Лицензии", collapsed: false, enabled: true },
 ];
 
