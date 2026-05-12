@@ -1,7 +1,54 @@
+# Robots.txt для SEO оптимизации
+# Актуально для Google, Yandex и других поисковых систем
+
+# Правила для всех роботов
 User-agent: *
 Allow: /
+Allow: /content/
+Allow: /*.js
+Allow: /*.css
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.gif
+Allow: /*.svg
+Allow: /*.webp
+Allow: /*.woff
+Allow: /*.woff2
+Allow: /*.ttf
+Allow: /*.eot
 
+# Запрет на индексацию технических папок
+Disallow: /assets/
+Disallow: /.vitepress/
+Disallow: /dist/
+Disallow: /node_modules/
+Disallow: /*.json$
+Disallow: /*.md$
+
+# Специальные правила для Яндекса
+User-agent: Yandex
+Allow: /
+Allow: /*.js$
+Allow: /*.css$
+Allow: /content/
+Disallow: /assets/
+Disallow: /.vitepress/
+Crawl-delay: 1
+
+# Специальные правила для Google
+User-agent: Googlebot
+Allow: /
+Allow: /content/
 Disallow: /assets/
 Disallow: /.vitepress/
 
+# Запрет на индексацию некоторыми ботами
+User-agent: MJ12bot
+User-agent: AhrefsBot
+User-agent: SemrushBot
+Disallow: /
+
+# Sitemaps
 Sitemap: https://starsu.ru/sitemap.xml
+Sitemap: https://starsu.ru/zh_sitemap.xml

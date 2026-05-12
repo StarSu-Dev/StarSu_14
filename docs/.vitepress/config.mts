@@ -136,12 +136,20 @@ export default defineConfig(async () => {
 
   return {
     lang: "ru-RU",
-    title: "StarSu",
-    description: "Справочник по Starfinder (alpha)",
+    title: "StarSu - Справочник Starfinder",
+    titleTemplate: ":title | StarSu",
+    description: "Полный справочник настольно-ролевой игры Starfinder на русском языке. Классы персонажей, расы, темы, заклинания, звездолёты, бестиарий и правила.",
     base: "/",
-
+    
+    /* SEO и Performance */
+    appearance: "dark",
+    ignoreDeadLinks: false,
+    
     sitemap: {
       hostname: "https://starsu.ru",
+      transformItems: (items) => {
+        return items.filter((item) => !item.url.includes("migration"))
+      },
     },
 
     lastUpdated: true,
@@ -155,6 +163,51 @@ export default defineConfig(async () => {
     cleanUrls: false,
     /* ---------- favicons ---------- */
     head: [
+      /* SEO и Meta-теги */
+      ["meta", { charset: "utf-8" }],
+      ["meta", { name: "viewport", content: "width=device-width, initial-scale=1.0, viewport-fit=cover" }],
+      ["meta", { name: "theme-color", content: "#1e293b" }],
+      ["meta", { name: "color-scheme", content: "light dark" }],
+      
+      /* Яндекс верификация */
+      ["meta", { name: "yandex-verification", content: "73e3bb3c02404b9a" }], 
+      
+      /* Google верификация */
+      ["meta", { name: "google-site-verification", content: "2JLrqa8dANHIWIqYFVLYA2-_XlAIrT7rVLP7AYqSG4Q" }],
+      
+      /* GEO таргетирование */
+      ["meta", { name: "geo.placename", content: "Russia" }],
+      ["meta", { name: "geo.region", content: "RU" }],
+      ["meta", { name: "ICBM", content: "55.7558, 37.6173" }], // Координаты России (центр)
+      
+      /* Open Graph теги */
+      ["meta", { property: "og:type", content: "website" }],
+      ["meta", { property: "og:title", content: "StarSu - Справочник по Starfinder" }],
+      ["meta", { property: "og:description", content: "Полный справочник настольно-ролевой игры Starfinder на русском языке. Классы, расы, заклинания, звездолёты, бестиарий и правила." }],
+      ["meta", { property: "og:site_name", content: "StarSu" }],
+      ["meta", { property: "og:url", content: "https://starsu.ru" }],
+      ["meta", { property: "og:locale", content: "ru_RU" }],
+      
+      /* Twitter Card теги */
+      ["meta", { name: "twitter:card", content: "summary_large_image" }],
+      ["meta", { name: "twitter:title", content: "StarSu - Справочник по Starfinder" }],
+      ["meta", { name: "twitter:description", content: "Полный справочник настольно-ролевой игры Starfinder на русском языке" }],
+      
+      /* Дополнительные SEO теги */
+      ["meta", { name: "author", content: "StarSu Community" }],
+      ["meta", { name: "copyright", content: "© 2024 StarSu. Starfinder is licensed under the Open Game License" }],
+      ["meta", { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" }],
+      ["meta", { name: "apple-mobile-web-app-capable", content: "yes" }],
+      ["meta", { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" }],
+      
+      /* Канонический URL */
+      ["link", { rel: "canonical", href: "https://starsu.ru" }],
+      
+      /* Альтернативные языки */
+      ["link", { rel: "alternate", hrefLang: "ru", href: "https://starsu.ru" }],
+      ["link", { rel: "alternate", hrefLang: "x-default", href: "https://starsu.ru" }],
+      
+      /* Favicons */
       ["link", { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
       [
         "link",
@@ -201,6 +254,38 @@ export default defineConfig(async () => {
         },
       ],
       ["link", { rel: "manifest", href: "/site.webmanifest" }],
+      
+      /* Security headers */
+      ["meta", { httpEquiv: "X-UA-Compatible", content: "IE=edge" }],
+      
+      /* Structured Data (JSON-LD) */
+      [
+        "script",
+        { type: "application/ld+json" },
+        JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "StarSu",
+          "url": "https://starsu.ru",
+          "description": "Справочник по настольно-ролевой игре Starfinder на русском языке",
+          "inLanguage": "ru-RU",
+          "author": {
+            "@type": "Organization",
+            "name": "StarSu Community",
+            "url": "https://starsu.ru",
+            "sameAs": [
+              "https://t.me/ThroughThe_Star_Su"
+            ]
+          },
+          "searchAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://starsu.ru?q={search_term_string}"
+            }
+          }
+        })
+      ]
     ],
 
     /* ---------- Тема и локализация ---------- */
