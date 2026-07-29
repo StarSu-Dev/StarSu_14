@@ -139,7 +139,7 @@ export default defineConfig(async () => {
     title: "StarSu - Справочник Starfinder",
     titleTemplate: ":title | StarSu",
     description: "Полный справочник настольно-ролевой игры Starfinder на русском языке. Классы персонажей, расы, темы, заклинания, звездолёты, бестиарий и правила.",
-    base: "/",
+    base: "/StarSu_14/",
     
     /* SEO и Performance */
     appearance: "dark",
