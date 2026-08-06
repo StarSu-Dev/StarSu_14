@@ -98,21 +98,18 @@
 </IfModule>
 
 # ============================================================================
-# REDIRECTS & URL REWRITING
+# REDIRECTS & URL REWRITING (УПРОЩЕННАЯ ВЕРСИЯ)
 # ============================================================================
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # Remove www from domain
-    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-    RewriteRule ^(.*)$ https://%1%{REQUEST_URI} [R=301,QSA,L]
-    
-    # Force HTTPS
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-    
-    # Remove index.html from URL
+
+    # Убираем www из URL (только если сайт должен быть без www)
+    # Раскомментируйте, если нужно:
+    # RewriteCond %{HTTP_HOST} ^www\.starsu\.ru$ [NC]
+    # RewriteRule ^(.*)$ https://starsu.ru/$1 [R=301,L]
+
+    # SPA fallback - перенаправляем все запросы на index.html
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.html [QSA,L]
